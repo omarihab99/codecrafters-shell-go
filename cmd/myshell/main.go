@@ -2,9 +2,9 @@ package main
 
 import (
 	"bufio"
-	"strings"
 	"fmt"
 	"os"
+	"strings"
 )
 
 func main() {
@@ -18,6 +18,7 @@ func main() {
 		}
 	}
 }
+
 // handleCommand is a function that takes a command and its arguments as input.
 //
 // Parameters:
@@ -28,6 +29,8 @@ func main() {
 func handleCommand(command string, args []string) {
 	if command == "exit" && len(args) > 0 && args[0] == "0" {
 		os.Exit(0)
+	} else if command == "echo" {
+		fmt.Println(strings.Join(args, " "))
 	} else {
 		fmt.Println(command + ": command not found")
 	}
