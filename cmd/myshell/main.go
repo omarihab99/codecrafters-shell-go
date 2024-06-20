@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"path/filepath"
 	"slices"
 	"strings"
 )
@@ -20,15 +21,26 @@ func (c Command) Execute() {
 	} else if c.Name == "echo" {
 		fmt.Println(strings.Join(c.Args, " "))
 	} else if c.Name == "type" {
-		subcommand := c.Args[0]
-		if slices.Contains(builtinCommand, subcommand) {
-			fmt.Println(subcommand + " is a shell builtin")
-		} else {
-			fmt.Println(subcommand + ": not found")
-		}
+		handeType(c)
 	} else {
 		fmt.Println(c.Name + ": command not found")
 	}
+}
+func handeType(c Command) {
+	subcommand := c.Args[0]
+	if slices.Contains(builtinCommand, subcommand) {
+		fmt.Println(subcommand + " is a shell builtin")
+		return
+	}
+	paths := strings.Split(os.Getenv("PATH"), ":")
+	for _, path := range paths {
+		filePath := filepath.Join(path, subcommand)
+		if _, err := os.Stat(filePath); err == nil {
+			fmt.Println(filePath)
+			return
+		}
+	}
+	fmt.Println(subcommand + ": not found")
 }
 
 var builtinCommand = []string{"cd", "pwd", "echo", "exit", "type"}
