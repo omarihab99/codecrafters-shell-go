@@ -25,8 +25,12 @@ func (c Command) Execute() {
 	} else if c.Name == "type" { // type
 		fmt.Println(c.CommandType)
 		return
+	} else if c.Name == "pwd" { //pwd
+		wd, _ := os.Getwd()
+		fmt.Println(wd)
+		return
 	}
-	fp := searchPath(c.Name) 
+	fp := searchPath(c.Name)
 	if fp != "" { // executable
 		cmd := exec.Command(fp, c.Args...)
 		output, err := cmd.CombinedOutput()
@@ -37,7 +41,7 @@ func (c Command) Execute() {
 	}
 	fmt.Println(c.Name + ": command not found") // command not found
 }
-func handeType(command string, Args []string) string {
+func handleType(command string, Args []string) string {
 	subcommand := command
 	if len(Args) > 0 {
 		subcommand = Args[0]
@@ -78,7 +82,7 @@ func main() {
 }
 
 func CreateCommand(command string, args []string) Command {
-	commandType := handeType(command , args)
+	commandType := handleType(command, args)
 	return Command{
 		Name:        command,
 		Args:        args,
