@@ -30,9 +30,13 @@ func (c Command) Execute() {
 		fmt.Println(wd)
 		return
 	} else if c.Name == "cd" {
-		err := os.Chdir(c.Args[0])
+		path := c.Args[0]
+		if path == "~" {
+			path = os.Getenv("HOME")
+		}
+		err := os.Chdir(path)
 		if err != nil {
-			fmt.Println("cd: " + c.Args[0] + ": No such file or directory")
+			fmt.Println("cd: " + path + ": No such file or directory")
 		}
 		return
 	}
