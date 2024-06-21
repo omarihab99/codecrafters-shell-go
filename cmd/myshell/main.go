@@ -29,6 +29,12 @@ func (c Command) Execute() {
 		wd, _ := os.Getwd()
 		fmt.Println(wd)
 		return
+	} else if c.Name == "cd" {
+		err := os.Chdir(c.Args[0])
+		if err != nil {
+			fmt.Println("cd: " + c.Args[0] + ": No such file or directory")
+		}
+		return
 	}
 	fp := searchPath(c.Name)
 	if fp != "" { // executable
